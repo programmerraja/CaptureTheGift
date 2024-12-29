@@ -1,0 +1,699 @@
+<!-- HTML Layout -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Santa’s Gift Catcher</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Arial", sans-serif;
+        background-color: #e0f7fa;
+        overflow: hidden;
+      }
+      #game-container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background: #e0f7fa;
+        overflow: hidden;
+      }
+      .hidden {
+        display: none;
+      }
+      #game-over-screen {
+        position: absolute;
+        top: 50%;
+        width: 250px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        z-index: 2;
+      }
+      h2 {
+        font-size: 2rem;
+        text-align: center;
+        color: #f10c0c;
+      }
+      button {
+        background-color: #f44336;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #fff;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #c62828;
+      }
+
+      @keyframes snow {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(100vh);
+        }
+      }
+      img {
+        position: absolute;
+        height: 100vh;
+        width: 100vw;
+        background: white;
+        opacity: 0.8;
+      }
+
+      audio {
+        display: none;
+      }
+      .snowflake {
+        position: absolute;
+        top: -10px;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: snow linear infinite;
+      }
+      .cap {
+        display: inline-block;
+      }
+      .cap-top {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #fff;
+        position: absolute;
+      }
+      .cap-main {
+        width: 0;
+        height: 0;
+        border-color: #e53935;
+        border-style: solid;
+        border-left-width: 60px;
+        border-top-width: 30px;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        position: relative;
+        left: 5px;
+        top: 15px;
+        z-index: 5;
+      }
+      .cap-main::before {
+        content: "";
+        position: absolute;
+        background-color: #e53935;
+        width: 65px;
+        height: 13px;
+        border-radius: 50%;
+        transform: rotate(25deg);
+        top: -20px;
+        left: -63px;
+        z-index: 5;
+      }
+      .cap-bottom {
+        width: 95px;
+        height: 30px;
+        border-radius: 10px;
+        background-color: #fff;
+        position: absolute;
+        top: 45px;
+        left: -7px;
+        z-index: 5;
+      }
+      .face {
+        width: 50px;
+        height: 50px;
+        background-color: #f1c4a7;
+        border-radius: 50%;
+        position: relative;
+        top: 20px;
+        left: 12px;
+        z-index: 4;
+      }
+      .ears {
+        background-color: #ef9a9a;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        position: absolute;
+        top: 73px;
+        z-index: 3;
+      }
+      .ears:nth-child(2) {
+        left: 38px;
+      }
+      .beard {
+        background-color: #fff;
+        height: 45px;
+        width: 45px;
+        border-radius: 0 0 0 100%;
+        position: relative;
+        top: 43px;
+        left: 2px;
+        z-index: 8;
+      }
+      .beard::before {
+        content: "";
+        position: absolute;
+        background-color: #fff;
+        height: 45px;
+        width: 45px;
+        border-radius: 50%;
+        left: 25px;
+      }
+      .eyes {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: #212121;
+        position: absolute;
+        top: 20px;
+      }
+      .eyes:nth-child(1) {
+        left: 10px;
+      }
+      .eyes:nth-child(2) {
+        right: 10px;
+      }
+      .nose {
+        width: 15px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #ef9a9a;
+        position: absolute;
+        top: 20.5px;
+        left: 17.5px;
+        z-index: 10;
+      }
+      .mouth {
+        width: 10px;
+        height: 5px;
+        border-radius: 1px 1px 20px 20px;
+        background-color: #212121;
+        position: absolute;
+        top: 35px;
+        left: 20px;
+        z-index: 9;
+      }
+      .body {
+        width: 85px;
+        height: 85px;
+        background-color: #e53935;
+        position: absolute;
+        left: -12.5px;
+        border-radius: 50%;
+        z-index: 3;
+      }
+      .belt {
+        height: 10px;
+        width: 100%;
+        background-color: #212121;
+        position: absolute;
+        top: 60px;
+        border-radius: 0 0 7px 7px;
+      }
+      .belt::before {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 10px;
+        left: calc(50% - 10px);
+        background-color: #f9ce1d;
+      }
+      .hand-left {
+        position: relative;
+        width: 40px;
+        height: 15px;
+        background-color: #e53935;
+        top: 10px;
+        left: -33.5px;
+        border-radius: 0 0 0 30px;
+      }
+      .hand-left::before {
+        content: "";
+        position: absolute;
+        background-color: #e53935;
+        height: 35px;
+        width: 15px;
+        border-radius: 0 0 0 30px;
+        top: -20px;
+      }
+      .hand-left::after {
+        content: "";
+        position: absolute;
+        width: 22.5px;
+        height: 10px;
+        background-color: #fff;
+        border-radius: 7px;
+        top: -25px;
+        left: -3.5px;
+      }
+      .hand-left div {
+        position: relative;
+      }
+      .hand-left div::before {
+        content: "";
+        position: absolute;
+        width: 15px;
+        height: 22.5px;
+        background-color: #f9ce1d;
+        border-radius: 45px 45px 0 0;
+        top: -40px;
+      }
+      .hand-left div::after {
+        content: "";
+        position: absolute;
+        width: 12.5px;
+        height: 7.5px;
+        background-color: #f9ce1d;
+        transform: rotate(-45deg);
+        border-radius: 50%;
+        top: -32.5px;
+        left: 9px;
+      }
+      .hand-right {
+        width: 45px;
+        height: 20px;
+        background-color: #e53935;
+        border-radius: 90px;
+        position: relative;
+        z-index: 10;
+        transform: rotate(60deg);
+        top: 5px;
+        left: 47.5px;
+      }
+      .hand-right::before {
+        content: "";
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        background-color: #f9ce1d;
+        border-radius: 50%;
+        top: -2.5px;
+        left: -5px;
+      }
+      .hand-right::after {
+        content: "";
+        position: absolute;
+        border-bottom: 12.5px solid #876e63;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        height: 0;
+        width: 3.5px;
+        top: 11.5px;
+        left: 5px;
+        transform: rotate(-20deg);
+      }
+      .bag {
+        width: 50px;
+        height: 50px;
+        background-color: #876e63;
+        position: absolute;
+        border-radius: 50%;
+        top: 60px;
+        left: 37.5px;
+        z-index: 2;
+      }
+      .leg-wraper {
+        position: relative;
+        top: 35px;
+        left: -47.5px;
+      }
+      .legs {
+        width: 12.5px;
+        height: 20px;
+        background-color: #e53935;
+        position: relative;
+        top: 0;
+        left: 0;
+      }
+      .legs::after {
+        content: "";
+        position: absolute;
+        top: 20px;
+        background-color: #212121;
+        width: 12.5px;
+        height: 12.5px;
+      }
+      .legs::before {
+        content: "";
+        position: absolute;
+        background-color: #212121;
+        top: 24px;
+        width: 12.5px;
+        height: 8.5px;
+        border-radius: 0 50% 0 0;
+      }
+      .legs:nth-child(1)::before {
+        left: 8.5px;
+      }
+      .legs:nth-child(2)::before {
+        left: -8.5px;
+        transform: rotateY(180deg);
+      }
+      .legs:nth-child(1) {
+        position: absolute;
+        left: 90px;
+      }
+      .legs:nth-child(2) {
+        left: 60px;
+      }
+      #santa {
+        position: absolute;
+        bottom: 20px;
+        left: calc(50% - 35px);
+      }
+      .glow {
+        box-shadow: 0 0 120px red, 0 0 120px red, 0 0 120px red;
+      }
+      #score-lives {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 24px;
+        color: red;
+      }
+
+      .gift {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: #ff6347;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px;
+      }
+
+      .gift .box-lid {
+        background-color: #cc231e;
+        height: 40px;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .gift .box-body {
+        flex-grow: 1;
+        background-color: #ff4500;
+        border-radius: 5px;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .gift .box-bowtie {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 3px;
+        height: 20px;
+      }
+
+      .gift .box-bowtie::before,
+      .gift .box-bowtie::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #ff1493;
+        border-radius: 50%;
+        border: 10px solid white;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .gift .box-bowtie::before {
+        left: -30px;
+      }
+
+      .gift .box-bowtie::after {
+        right: -30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-container">
+      <img src="./bg.jpg" />
+      <audio src="./bg.mp3" loop="true" autoplay></audio>
+      <div id="score-lives">
+        <span id="score-display">Score: 0</span><br />
+        <span id="lives-display">Lives: 3</span>
+      </div>
+      <div class="santa" id="santa">
+        <div class="wraper">
+          <div class="cap">
+            <div class="cap-top"></div>
+            <div class="cap-main"></div>
+            <div class="cap-bottom"></div>
+          </div>
+          <div class="ears"></div>
+          <div class="ears"></div>
+          <div class="face">
+            <div class="eyes"></div>
+            <div class="eyes"></div>
+            <div class="nose"></div>
+            <div class="beard"></div>
+            <div class="mouth"></div>
+          </div>
+          <div class="bag"></div>
+          <div class="body">
+            <div class="belt"></div>
+          </div>
+          <div class="hand-left">
+            <div></div>
+          </div>
+          <div class="hand-right"></div>
+          <div class="leg-wraper">
+            <div class="legs"></div>
+            <div class="legs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <canvas id="game-canvas"></canvas>
+    <div id="game-over-screen" class="hidden">
+      <p>Your Score: <span id="final-score"></span></p>
+      <h2>Game Over!</h2>
+    </div>
+  </body>
+  <script>
+    const canvas = document.getElementById("game-canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let score = 0;
+    let lives = 3;
+    let level = 1;
+    let gameOver = false;
+    let gifts = [];
+    let santa = document.getElementById("santa");
+    let audio = document.querySelector("audio");
+    let speedMultiplier = 1;
+    let specialGiftChance = 0.05;
+    let magnetActive = false;
+    let giftMultiplierActive = false;
+    let giftMultiplierDuration = 0;
+
+    function Gift(x, y) {
+      this.x = x;
+      this.y = y;
+      this.width = 50;
+      this.height = 50;
+      this.speed = 3 + level * 0.5;
+
+      const giftBox = document.createElement("div");
+      giftBox.classList.add("gift");
+
+      const lid = document.createElement("div");
+      lid.classList.add("box-lid");
+      giftBox.appendChild(lid);
+
+      const body = document.createElement("div");
+      body.classList.add("box-body");
+      giftBox.appendChild(body);
+
+      const bowtie = document.createElement("div");
+      bowtie.classList.add("box-bowtie");
+      giftBox.appendChild(bowtie);
+      this.element = giftBox;
+
+      document.body.appendChild(giftBox);
+      this.updatePosition();
+    }
+
+    Gift.prototype.updatePosition = function () {
+      this.element.style.left = this.x + "px";
+      this.element.style.top = this.y + "px";
+    };
+
+    function startGame() {
+      document.getElementById("game-over-screen").classList.add("hidden");
+      const existingGifts = document.querySelectorAll(".gift");
+      existingGifts.forEach((gift) => gift.remove());
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function gameLoop() {
+      if (gameOver) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      santa.style.left =
+        (parseInt(santa.style.left) || canvas.width / 2 - 35) + "px";
+
+      gifts.forEach((gift, index) => {
+        gift.y += gift.speed * speedMultiplier;
+        gift.updatePosition();
+
+        if (magnetActive) {
+          if (gift.x < canvas.width / 2) gift.x += 1.5;
+          if (gift.x > canvas.width / 2) gift.x -= 1.5;
+        }
+
+        if (
+          gift.y + gift.height > canvas.height - 100 &&
+          gift.y < canvas.height - 100 + 60
+        ) {
+          if (
+            gift.x + gift.width > parseInt(santa.style.left) &&
+            gift.x < parseInt(santa.style.left) + 70
+          ) {
+            handleGiftCatch(gift);
+            gifts.splice(index, 1);
+            document.body.removeChild(gift.element);
+          }
+        }
+
+        if (gift.y > canvas.height) {
+          gifts.splice(index, 1);
+          handleMiss();
+          document.body.removeChild(gift.element);
+        }
+      });
+
+      if (Math.random() < 0.02 * level) {
+        gifts.push(new Gift(Math.random() * canvas.width, -50));
+      }
+
+      if (score > level * 100) {
+        level++;
+        speedMultiplier += 0.2;
+      }
+
+      document.getElementById("score-display").innerText = `Score: ${score}`;
+      document.getElementById("lives-display").innerText = `Lives: ${lives}`;
+
+      if (lives <= 0) {
+        audio.pause();
+        gameOver = true;
+        showGameOver();
+      } else {
+        requestAnimationFrame(gameLoop);
+      }
+    }
+
+    function handleGiftCatch(gift) {
+      score += giftMultiplierActive ? 20 : 10;
+      lives += 1;
+
+      applyPowerUp();
+    }
+
+    function handleMiss() {
+      lives--;
+    }
+
+    function applyPowerUp() {
+      const randomPowerUp = Math.random();
+      if (randomPowerUp < 0.33) {
+        activateMagnet();
+      } else if (randomPowerUp < 0.66) {
+        activateGiftMultiplier();
+      }
+    }
+
+    function activateMagnet() {
+      santa.classList.toggle("glow");
+      magnetActive = true;
+
+      setTimeout(() => {
+        santa.classList.toggle("glow");
+        magnetActive = false;
+      }, 5000);
+    }
+
+    function activateGiftMultiplier() {
+      giftMultiplierActive = true;
+      giftMultiplierDuration = 10;
+      setTimeout(() => (giftMultiplierActive = false), 10000);
+    }
+
+    function showGameOver() {
+      document.getElementById("final-score").innerText = score;
+      document.getElementById("game-over-screen").classList.remove("hidden");
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (!gameOver) {
+        audio.play();
+      }
+      const santaLeft = parseInt(santa.style.left) || canvas.width / 2 - 35;
+      if (event.key === "ArrowLeft" && santaLeft > 0) {
+        santa.style.left = santaLeft - 10 + "px";
+      } else if (event.key === "ArrowRight" && santaLeft + 70 < canvas.width) {
+        santa.style.left = santaLeft + 10 + "px";
+      }
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    canvas.addEventListener("touchstart", (event) => {
+      touchStartX = event.touches[0].clientX;
+    });
+
+    canvas.addEventListener("touchmove", (event) => {
+      touchEndX = event.touches[0].clientX;
+    });
+
+    canvas.addEventListener("touchend", () => {
+      const santaLeft = parseInt(santa.style.left) || canvas.width / 2 - 35;
+      if (touchEndX < touchStartX && santaLeft > 0) {
+        santa.style.left = santaLeft - 10 + "px";
+      } else if (touchEndX > touchStartX && santaLeft + 70 < canvas.width) {
+        santa.style.left = santaLeft + 10 + "px";
+      }
+    });
+
+    function createSnowflakes() {
+      for (let i = 0; i < 10; i++) {
+        const snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.style.left = Math.random() * 100 + "vw";
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + "s";
+        document.body.appendChild(snowflake);
+      }
+    }
+
+    createSnowflakes();
+    window.onload = startGame;
+  </script>
+</html>
