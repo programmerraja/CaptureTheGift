@@ -7,7 +7,7 @@ _This project is a submission for the [Frontend Challenge - December Edition, CS
 This game draws inspiration from the joy of the holiday season and the excitement of gift-giving. I wanted to create a lighthearted experience that captures the spirit of Christmas, reminiscent of the classic games we enjoyed as children.
 
 ## Demo 
-You can view the live demo of the game [here](link-to-demo).
+You can view the live demo of the game [here](https://programmerraja.github.io/CaptureTheGift/).
 
 ### Game Objective
 Your goal is simple: catch as many falling gifts as possible! You start with 3 lives, and every time you catch a gift, your score and lives increase. Randomly, a magnet power-up will appear, lasting for 5 seconds, which attracts all the gifts to you, making it easier to catch them. Plus, with a little bit of luck, you might even double the value of the gifts you catch!
